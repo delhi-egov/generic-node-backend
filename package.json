@@ -1,7 +1,7 @@
 {
-  "name": "dfs-node-backend",
+  "name": "generic-node-backend",
   "version": "1.0.0",
-  "description": "Delhi Fire Services node backend",
+  "description": "Generic node backend",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

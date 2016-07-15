@@ -31,7 +31,7 @@ server.state("delhi-gov-dfs", {
 const options = {
     swagger: {
         info: {
-            title: 'Delhi Fire Services API Documentation',
+            title: 'API Documentation',
             version: Pack.version
         },
         payloadType: 'form'
