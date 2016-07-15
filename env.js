@@ -2,6 +2,7 @@
 
 module.exports = {
     "development" : {
+        "storage" : "/home/vaibhav/Documents/temp",
         "sequelize": {
           "username": "root",
           "password": "password",
@@ -11,6 +12,7 @@ module.exports = {
         }
     },
     "production" : {
+        "storage" : "/home/vaibhav/Documents/temp",
         "sequelize": {
           "username": "root",
           "password": "password",

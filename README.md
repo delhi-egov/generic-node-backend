@@ -9,7 +9,8 @@
 7. npm install
 8. Create database 'dfs' in your MySQL instance
 9. Update the password for 'root' user in the env.js file
-10. sudo apt-get install mysql-client-5.5
+10. Update the 'storage' path to some path in your home directory
+11. sudo apt-get install mysql-client-5.5
 
 ## Running instructions
 

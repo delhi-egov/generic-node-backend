@@ -10,6 +10,7 @@ const Env = require('./middleware/env');
 const Auth = require('./middleware/auth');
 const Db = require('./middleware/db');
 const UserController = require('./controllers/user_controller');
+const StaticController = require('./controllers/static_controller');
 
 const server = new Hapi.Server();
 server.connection({
@@ -32,7 +33,8 @@ const options = {
         info: {
             title: 'Delhi Fire Services API Documentation',
             version: Pack.version
-        }
+        },
+        payloadType: 'form'
     },
     inert: {
 
@@ -50,6 +52,9 @@ const options = {
 
     },
     user_controller: {
+
+    },
+    static_controller: {
 
     }
 };
@@ -82,6 +87,10 @@ const plugins = [
     {
         register: UserController,
         options: options.user_controller
+    },
+    {
+        register: StaticController,
+        options: options.static_controller
     },
 ];
 
