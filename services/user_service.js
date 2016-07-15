@@ -20,9 +20,10 @@ module.exports = class UserService {
     }
 
     createUser(user, callback) {
+        var that = this;
         Bcrypt.hash(user.password, 8 , function(err, hash) {
             user.password = hash;
-            this.db.User.create(user).then(function(createdUser) {
+            that.db.User.create(user).then(function(createdUser) {
                 callback(null, createdUser);
             }).error(function(err) {
                 callback(err);
@@ -37,12 +38,13 @@ module.exports = class UserService {
     }
 
     isValidUser(user, callback) {
+        var that = this;
         this.findUserByPhone(user.phone, function(err, foundUser) {
             if(err) {
                 callback(err);
             }
             else {
-                this.isPasswordCorrect(user.password, foundUser, function(err, isValid) {
+                that.isPasswordCorrect(user.password, foundUser, function(err, isValid) {
                     if(err) {
                         callback(err);
                     }

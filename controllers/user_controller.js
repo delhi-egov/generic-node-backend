@@ -85,7 +85,9 @@ var ready = function(server, next) {
         method: 'POST',
         path: '/login',
         config: {
-            auth: false,
+            auth: {
+                mode: 'try'
+            },
             description: "This endpoint is used login the user",
             notes: 'Phone number and password must be passed. Returns logged in user info',
             tags: ['api', 'user'],
@@ -116,7 +118,9 @@ var ready = function(server, next) {
         method: 'POST',
         path: '/logout',
         config: {
-            auth: 'try',
+            auth: {
+                mode: 'optional'
+            },
             description: "This endpoint is used logout the user",
             notes: 'Returns true',
             tags: ['api', 'user'],

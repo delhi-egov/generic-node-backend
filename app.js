@@ -9,6 +9,7 @@ const Pack = require('./package');
 const Env = require('./middleware/env');
 const Auth = require('./middleware/auth');
 const Db = require('./middleware/db');
+const UserController = require('./controllers/user_controller');
 
 const server = new Hapi.Server();
 server.connection({
@@ -30,7 +31,7 @@ const options = {
     swagger: {
         info: {
             title: 'Delhi Fire Services API Documentation',
-            version: Pack.version,
+            version: Pack.version
         }
     },
     inert: {
@@ -46,6 +47,9 @@ const options = {
 
     },
     db: {
+
+    },
+    user_controller: {
 
     }
 };
@@ -74,6 +78,10 @@ const plugins = [
     {
         register: Db,
         options: options.db
+    },
+    {
+        register: UserController,
+        options: options.user_controller
     },
 ];
 
