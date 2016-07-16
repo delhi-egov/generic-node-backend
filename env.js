@@ -3,6 +3,13 @@
 module.exports = {
     "development" : {
         "storage" : "/home/vaibhav/Documents/temp",
+        "bpm" : {
+            "url" : "http://localhost:9090/",
+            "auth" : {
+                "user" : "kermit",
+                "pass" : "kermit"
+            }
+        },
         "sequelize": {
           "username": "root",
           "password": "password",
@@ -13,6 +20,13 @@ module.exports = {
     },
     "production" : {
         "storage" : "/home/vaibhav/Documents/temp",
+        "bpm" : {
+            "url" : "http://localhost:9090/",
+            "auth" : {
+                "user" : "kermit",
+                "pass" : "kermit"
+            }
+        },
         "sequelize": {
           "username": "root",
           "password": "password",

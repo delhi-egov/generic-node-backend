@@ -8,11 +8,11 @@ const ApplicationService = require('../services/application_service');
 
 var ready = function(server, next) {
 
-    const applicationService = new ApplicationService(server.db);
+    const applicationService = new ApplicationService(server.db, server.env);
 
     server.route({
         method: 'POST',
-        path: '/create',
+        path: '/application/create',
         config: {
             description: "This endpoint is used to create a new application",
             notes: 'Returns the created application object',
@@ -105,7 +105,7 @@ var ready = function(server, next) {
                             applicationId: Joi.number().integer().required().description("The application to which the document is being attached"),
                             type: Joi.string().required().description("The type of the document (Form-I, Form-J, etc)"),
                         }).required().description("The content of the form"),
-                        file: Joi.any().meta({ swaggerType: 'file' }).description('The file to be uploaded')
+                        file: Joi.any().required().meta({ swaggerType: 'file' }).description('The file to be uploaded')
                     }
                 },
                 payload: {
@@ -143,8 +143,125 @@ var ready = function(server, next) {
                     else {
                         reply(Boom.badRequest("No file uploaded"));
                     }
+                }
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/application/{applicationId}/status',
+            config: {
+                description: "This endpoint is used to get the status of an application",
+                notes: 'Returns an array of activities where the application is waiting',
+                tags: ['api', 'application'],
+                validate: {
+                    params: {
+                        applicationId: Joi.number().integer().required().description("The application for which the status needs to be fetched")
+                    }
                 },
-                plugins: {'hapiAuthorization': {role: 'ADMIN'}}
+                handler: function(request, reply) {
+                    applicationService.getApplicationStatus(request.auth.credentials.id, request.params.applicationId, function(err, status) {
+                        if(err) {
+                            Winston.error(err.message);
+                            if(err.message == 'Unauthorized') {
+                                return reply(Boom.unauthorized("The application you are trying to access does not belong to you"));
+                            }
+                            else {
+                                return reply(Boom.badImplementation(err));
+                            }
+                        }
+                        reply(status);
+                    });
+                }
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/application/{applicationId}/tasks',
+            config: {
+                description: "This endpoint is used to get the tasks of an application",
+                notes: 'Returns an array of tasks',
+                tags: ['api', 'application'],
+                validate: {
+                    params: {
+                        applicationId: Joi.number().integer().required().description("The application for which the tasks needs to be fetched")
+                    }
+                },
+                handler: function(request, reply) {
+                    applicationService.getTasksForApplication(request.auth.credentials.id, request.params.applicationId, function(err, tasks) {
+                        if(err) {
+                            Winston.error(err.message);
+                            if(err.message == 'Unauthorized') {
+                                return reply(Boom.unauthorized("The application you are trying to acsess does not belong to you"));
+                            }
+                            else {
+                                return reply(Boom.badImplementation(err));
+                            }
+                        }
+                        reply(tasks);
+                    });
+                }
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/application/{applicationId}/task/{taskId}/variables',
+            config: {
+                description: "This endpoint is used to get the variables of a task",
+                notes: 'Returns an array of variables',
+                tags: ['api', 'application'],
+                validate: {
+                    params: {
+                        applicationId: Joi.number().integer().required().description("The application to which the task belongs"),
+                        taskId: Joi.number().integer().required().description("The task for which variables need to be fetched")
+                    }
+                },
+                handler: function(request, reply) {
+                    applicationService.getVariablesForTask(request.auth.credentials.id, request.params.applicationId, request.params.taskId, function(err, variables) {
+                        if(err) {
+                            Winston.error(err.message);
+                            if(err.message == 'Unauthorized') {
+                                return reply(Boom.unauthorized("The application you are trying to acsess does not belong to you"));
+                            }
+                            else {
+                                return reply(Boom.badImplementation(err));
+                            }
+                        }
+                        reply(variables);
+                    });
+                }
+            }
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/task/complete',
+            config: {
+                description: "This endpoint is used to mark a task complete",
+                notes: 'Returns the task object',
+                tags: ['api', 'application'],
+                validate: {
+                    payload: {
+                        applicationId: Joi.number().integer().required().description("The application to which the task belongs"),
+                        taskId: Joi.number().integer().required().description("The task for which variables need to be fetched")
+                    }
+                },
+                handler: function(request, reply) {
+                    applicationService.completeTask(request.auth.credentials.id, request.payload.applicationId, request.payload.taskId, function(err, task) {
+                        if(err) {
+                            Winston.error(err.message);
+                            if(err.message == 'Unauthorized') {
+                                return reply(Boom.unauthorized("The application you are trying to acsess does not belong to you"));
+                            }
+                            else {
+                                return reply(Boom.badImplementation(err));
+                            }
+                        }
+                        reply(task);
+                    });
+                }
             }
         });
 
