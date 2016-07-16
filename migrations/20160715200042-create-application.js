@@ -12,13 +12,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      stage: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       userId: {
         type: Sequelize.INTEGER,
         references: {
           model: "Users",
           key: "id"
-        },
-        allowNull: false
+        }
       },
       createdAt: {
         allowNull: false,

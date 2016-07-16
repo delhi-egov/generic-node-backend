@@ -2,6 +2,7 @@
 
 const Boom = require('boom');
 const Joi = require('joi');
+const Winston = require('winston');
 const UserService = require('../services/user_service');
 
 var ready = function(server, next) {
@@ -18,15 +19,16 @@ var ready = function(server, next) {
             tags: ['api', 'user'],
             validate: {
                 payload: {
-                    name: Joi.string().alphanum().required().description("Name of the user"),
+                    name: Joi.string().required().description("Name of the user"),
                     phone: Joi.number().integer().required().description("Mobile number of the user"),
                     email: Joi.string().email().required().description("Email address of the user"),
-                    password: Joi.string().alphanum().required().description("Password of the user")
+                    password: Joi.string().required().description("Password of the user")
                 }
             },
             handler: function(request, reply) {
                 userService.findUserByPhone(request.payload.phone, function(err, user) {
                     if(err) {
+                        Winston.error(err.message);
                         return reply(Boom.badImplementation(err));
                     }
 
@@ -40,6 +42,7 @@ var ready = function(server, next) {
 
                     userService.createUser(request.payload, function(err, createdUser) {
                         if(err) {
+                            Winston.error(err.message);
                             return reply(Boom.badImplementation(err));
                         }
 
@@ -61,12 +64,13 @@ var ready = function(server, next) {
             validate: {
                 payload: {
                     phone: Joi.number().integer().required().description("Mobile number of the user"),
-                    password: Joi.string().alphanum().required().description("Password of the user")
+                    password: Joi.string().required().description("Password of the user")
                 }
             },
             handler: function(request, reply) {
                 userService.isValidUser(request.payload, function(err, user) {
                     if(err) {
+                        Winston.error(err.message);
                         return reply(Boom.badImplementation(err));
                     }
 
@@ -94,7 +98,7 @@ var ready = function(server, next) {
             validate: {
                 payload: {
                     phone: Joi.number().integer().required().description("Mobile number of the user"),
-                    password: Joi.string().alphanum().required().description("Password of the user")
+                    password: Joi.string().required().description("Password of the user")
                 }
             },
             handler: function(request, reply) {
@@ -103,6 +107,7 @@ var ready = function(server, next) {
                 }
                 userService.isValidUser(request.payload, function(err, user) {
                     if(err) {
+                        Winston.error(err.message);
                         return reply(Boom.badImplementation(err));
                     }
 

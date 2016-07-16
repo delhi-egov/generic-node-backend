@@ -11,6 +11,7 @@ const Auth = require('./middleware/auth');
 const Db = require('./middleware/db');
 const UserController = require('./controllers/user_controller');
 const StaticController = require('./controllers/static_controller');
+const ApplicationController = require('./controllers/application_controller');
 
 const server = new Hapi.Server();
 server.connection({
@@ -52,10 +53,17 @@ const options = {
 
     },
     user_controller: {
-
+        routes: {
+            prefix: "/user"
+        }
     },
     static_controller: {
 
+    },
+    application_controller: {
+        routes: {
+            prefix: "/application"
+        }
     }
 };
 
@@ -91,6 +99,10 @@ const plugins = [
     {
         register: StaticController,
         options: options.static_controller
+    },
+    {
+        register: ApplicationController,
+        options: options.application_controller
     },
 ];
 

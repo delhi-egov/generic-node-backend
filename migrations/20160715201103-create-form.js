@@ -21,8 +21,7 @@ module.exports = {
         references: {
           model: "Applications",
           key: "id"
-        },
-        allowNull: false
+        }
       },
       createdAt: {
         allowNull: false,
