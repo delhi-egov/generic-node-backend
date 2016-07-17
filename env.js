@@ -6,8 +6,8 @@ module.exports = {
         "bpm" : {
             "url" : "http://localhost:8080/bpm-engine/",
             "auth" : {
-                "user" : "kermit",
-                "pass" : "kermit"
+                "user" : "vijay",
+                "pass" : "password"
             }
         },
         "sequelize": {
@@ -23,8 +23,8 @@ module.exports = {
         "bpm" : {
             "url" : "http://localhost:8080/bpm-engine/",
             "auth" : {
-                "user" : "kermit",
-                "pass" : "kermit"
+                "user" : "vijay",
+                "pass" : "password"
             }
         },
         "sequelize": {

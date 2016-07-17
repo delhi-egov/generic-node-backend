@@ -274,17 +274,24 @@ var ready = function(server, next) {
                 validate: {
                     payload: {
                         applicationId: Joi.number().integer().required().description("The application to which the task belongs"),
-                        taskId: Joi.number().integer().required().description("The task for which variables need to be fetched")
+                        taskId: Joi.number().integer().required().description("The task for which variables need to be fetched"),
+                        // variables: Joi.array().items(Joi.object({
+                        //     name: Joi.string().required().description("The name of the variable"),
+                        //     value: Joi.any().required().description("The value of the variable"),
+                        //     type: Joi.string().alphanum().description("The type of the variables")
+                        // })).min(0).required().description("Any variables that need to be set while finishing the task")
+                        variables: Joi.array().required().description("Array of variables that need to be set while finishing the task")
                     }
                 },
                 handler: function(request, reply) {
-                    applicationService.completeTask(request.auth.credentials.id, request.payload.applicationId, request.payload.taskId, function(err, task) {
+                    applicationService.completeTask(request.auth.credentials.id, request.payload.applicationId, request.payload.taskId, request.payload.variables, function(err, task) {
                         if(err) {
                             Winston.error(err.message);
                             if(err.message == 'Unauthorized') {
                                 return reply(Boom.unauthorized("The application you are trying to acsess does not belong to you"));
                             }
                             else {
+                                Winston.error(err);
                                 return reply(Boom.badImplementation(err));
                             }
                         }

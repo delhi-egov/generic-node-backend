@@ -186,7 +186,7 @@ module.exports = class ApplicationService {
         });
     }
 
-    completeTask(userId, applicationId, taskId, callback) {
+    completeTask(userId, applicationId, taskId, variables, callback) {
         var that = this;
 
         this.findApplicationById(applicationId, function(application) {
@@ -207,7 +207,7 @@ module.exports = class ApplicationService {
                     if(!found) {
                         return callback(new Error("Unauthorized"));
                     }
-                    that.activitiClient.completeTask(taskId, [], callback);
+                    that.activitiClient.completeTask(taskId, variables, callback);
                 });
             });
         });
