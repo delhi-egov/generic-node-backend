@@ -37,7 +37,7 @@ var ready = function(server, next) {
 
     server.route({
         method: 'POST',
-        path: '/changeStage',
+        path: '/application/changeStage',
         config: {
             description: "This endpoint is used to change the stage of an application",
             notes: 'Returns the updated application object',
@@ -63,7 +63,7 @@ var ready = function(server, next) {
 
     server.route({
         method: 'POST',
-        path: '/attachForm',
+        path: '/application/attachForm',
         config: {
             description: "This endpoint is used to attach a form to an application",
             notes: 'Returns true',
@@ -94,7 +94,7 @@ var ready = function(server, next) {
 
     server.route({
             method: 'POST',
-            path: '/attachDocument',
+            path: '/application/attachDocument',
             config: {
                 description: "This endpoint is used to attach a document to an application",
                 notes: 'Returns true',
@@ -143,6 +143,35 @@ var ready = function(server, next) {
                     else {
                         reply(Boom.badRequest("No file uploaded"));
                     }
+                }
+            }
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/application/complete',
+            config: {
+                description: "This endpoint is used to mark an application complete",
+                notes: 'Returns the application object',
+                tags: ['api', 'application'],
+                validate: {
+                    payload: {
+                        applicationId: Joi.number().integer().required().description("The application which needs to be marked complete"),
+                    }
+                },
+                handler: function(request, reply) {
+                    applicationService.completeApplication(request.auth.credentials.id, request.payload.applicationId, function(err, application) {
+                        if(err) {
+                            Winston.error(err.message);
+                            if(err.message == 'Unauthorized') {
+                                return reply(Boom.unauthorized("The application you are trying to access does not belong to you"));
+                            }
+                            else {
+                                return reply(Boom.badImplementation(err));
+                            }
+                        }
+                        reply(application);
+                    });
                 }
             }
         });

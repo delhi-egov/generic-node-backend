@@ -11,7 +11,7 @@ var ready = function(server, next) {
 
     server.route({
         method: 'POST',
-        path: '/register',
+        path: '/user/register',
         config: {
             auth: false,
             description: "This endpoint is used to register a new user",
@@ -55,7 +55,7 @@ var ready = function(server, next) {
 
     server.route({
         method: 'POST',
-        path: '/isValidUser',
+        path: '/user/isValid',
         config: {
             auth: false,
             description: "This endpoint is used to test if a user is valid",
@@ -87,7 +87,7 @@ var ready = function(server, next) {
 
     server.route({
         method: 'POST',
-        path: '/login',
+        path: '/user/login',
         config: {
             auth: {
                 mode: 'try'
@@ -121,7 +121,7 @@ var ready = function(server, next) {
 
     server.route({
         method: 'POST',
-        path: '/logout',
+        path: '/user/logout',
         config: {
             auth: {
                 mode: 'optional'
@@ -138,7 +138,7 @@ var ready = function(server, next) {
 
     server.route({
         method: 'GET',
-        path: '/me',
+        path: '/user/me',
         config: {
             description: "This endpoint is used to get logged in user's information",
             notes: 'Returns the complete user object',

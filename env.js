@@ -4,7 +4,7 @@ module.exports = {
     "development" : {
         "storage" : "/home/vaibhav/Documents/temp",
         "bpm" : {
-            "url" : "http://localhost:9090/",
+            "url" : "http://localhost:8080/bpm-engine/",
             "auth" : {
                 "user" : "kermit",
                 "pass" : "kermit"
@@ -21,7 +21,7 @@ module.exports = {
     "production" : {
         "storage" : "/home/vaibhav/Documents/temp",
         "bpm" : {
-            "url" : "http://localhost:9090/",
+            "url" : "http://localhost:8080/bpm-engine/",
             "auth" : {
                 "user" : "kermit",
                 "pass" : "kermit"
