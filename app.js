@@ -16,7 +16,10 @@ const ApplicationController = require('./controllers/application_controller');
 const server = new Hapi.Server();
 server.connection({
     host: process.env.HOST || 'localhost',
-    port: process.env.PORT || 9999
+    port: process.env.PORT || 9999,
+    routes: {
+        cors: true
+    }
 });
 
 // Cookie config
@@ -26,6 +29,7 @@ server.state("delhi-gov-dfs", {
     path: "/",
     encoding: "iron",
     password: "this-password-must-come-from-env-variable-hence-remove-from-here-at-deploy-time", //TODO: Fixme
+    isHttpOnly: false,
 });
 
 // Plugin options

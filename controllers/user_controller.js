@@ -89,9 +89,7 @@ var ready = function(server, next) {
         method: 'POST',
         path: '/user/login',
         config: {
-            auth: {
-                mode: 'try'
-            },
+            auth: false,
             description: "This endpoint is used login the user",
             notes: 'Phone number and password must be passed. Returns logged in user info',
             tags: ['api', 'user'],
@@ -111,6 +109,10 @@ var ready = function(server, next) {
                         return reply(Boom.badImplementation(err));
                     }
 
+                    if(!user) {
+                        return reply(Boom.unauthorized("Invalid credentials"));
+                    }
+                    
                     request.cookieAuth.set(user);
 
                     reply(user);

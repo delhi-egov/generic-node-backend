@@ -12,6 +12,7 @@ var ready = function(server, next) {
             cookie: "delhi-gov-dfs-auth", // Cookie name
             ttl: 24 * 60 * 60 * 1000, // Set session to 1 day
             isSecure: false, //TODO: Fixme
+            isHttpOnly: false,
         });
         server.auth.default('session');
     });

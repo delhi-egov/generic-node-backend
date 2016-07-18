@@ -9,7 +9,8 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Document.belongsTo(models.Application);
       }
-    }
+    },
+    paranoid: true,
   });
   return Document;
 };

@@ -41,7 +41,11 @@ module.exports = class UserService {
         var that = this;
         this.findUserByPhone(user.phone, function(err, foundUser) {
             if(err) {
-                callback(err);
+                return callback(err);
+            }
+
+            if(!foundUser) {
+                callback(null, null);
             }
             else {
                 that.isPasswordCorrect(user.password, foundUser, function(err, isValid) {

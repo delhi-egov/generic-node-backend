@@ -101,10 +101,7 @@ var ready = function(server, next) {
                 tags: ['api', 'application'],
                 validate: {
                     payload: {
-                        form: Joi.object({
-                            applicationId: Joi.number().integer().required().description("The application to which the document is being attached"),
-                            type: Joi.string().required().description("The type of the document (Form-I, Form-J, etc)"),
-                        }).required().description("The content of the form"),
+                        form: Joi.string().required().description("The content of the form. Must be stringified json with fields applicationId and type"),
                         file: Joi.any().required().meta({ swaggerType: 'file' }).description('The file to be uploaded')
                     }
                 },
@@ -114,6 +111,7 @@ var ready = function(server, next) {
                 },
                 handler: function(request, reply) {
                     var data = request.payload;
+                    request.payload.form = JSON.parse(request.payload.form);
                     if (data.file) {
                         var name = data.file.hapi.filename + '.' + request.auth.credentials.phone + '.' + Date.now();
                         var path = server.env.storage + "/" + name;

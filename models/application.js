@@ -9,7 +9,8 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Application.belongsTo(models.User);
       }
-    }
+    },
+    paranoid: true,
   });
   return Application;
 };

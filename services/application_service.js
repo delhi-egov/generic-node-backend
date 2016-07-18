@@ -64,7 +64,6 @@ module.exports = class ApplicationService {
 
     attachDocument(userId, applicationId, documentType, documentPath, callback) {
         var that = this;
-
         this.findApplicationById(applicationId, function(application) {
             application.getUser().then(function(user) {
                 if(user.id != userId) {
@@ -126,7 +125,17 @@ module.exports = class ApplicationService {
                                 value: user
                             }
                         ];
-                        that.activitiClient.startProcessInstance(application.type, application.id, variables, callback);
+                        that.activitiClient.startProcessInstance(application.type, application.id, variables, function(err, instance) {
+                            if(err) {
+                                return callback(err);
+                            }
+                            that.changeStage(userId, applicationId, 'COMPLETE', function(err, application) {
+                                if(err) {
+                                    return callback(err);
+                                }
+                                callback(null, instance);
+                            });
+                        });
                     });
                 });
             });
