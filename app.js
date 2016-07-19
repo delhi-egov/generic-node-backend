@@ -12,6 +12,7 @@ const Db = require('./middleware/db');
 const UserController = require('./controllers/user_controller');
 const StaticController = require('./controllers/static_controller');
 const ApplicationController = require('./controllers/application_controller');
+const NotificationController = require('./controllers/notification_controller');
 
 const server = new Hapi.Server();
 server.connection({
@@ -68,7 +69,10 @@ const options = {
         routes: {
             prefix: "/application"
         }
-    }
+    },
+    notification_controller: {
+
+    },
 };
 
 const plugins = [
@@ -107,6 +111,10 @@ const plugins = [
     {
         register: ApplicationController,
         options: options.application_controller
+    },
+    {
+        register: NotificationController,
+        options: options.notification_controller
     },
 ];
 

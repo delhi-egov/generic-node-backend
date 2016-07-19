@@ -1,9 +1,17 @@
 "use strict";
 
 const AuthCookie = require("hapi-auth-cookie");
+const BasicAuth = require("hapi-auth-basic");
+const UserService = require("../services/user_service");
 
 var ready = function(server, next) {
-    server.register(AuthCookie, (err) => {
+    const userService = new UserService(server.db);
+    var validate = function(request, phone, password, callback) {
+        userService.isValidUser({phone: phone, password: password}, function(err, user) {
+            callback(err, user !== null, user);
+        });
+    };
+    server.register([AuthCookie, BasicAuth], (err) => {
         if(err) {
             throw err;
         }
@@ -14,6 +22,7 @@ var ready = function(server, next) {
             isSecure: false, //TODO: Fixme
             isHttpOnly: false,
         });
+        server.auth.strategy('simple', 'basic', { validateFunc: validate });
         server.auth.default('session');
     });
 

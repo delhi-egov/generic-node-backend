@@ -11,6 +11,26 @@ var ready = function(server, next) {
     const applicationService = new ApplicationService(server.db, server.env);
 
     server.route({
+        method: 'GET',
+        path: '/applications',
+        config: {
+            description: "This endpoint is used to get a user's applications",
+            notes: 'Returns the list of applications',
+            tags: ['api', 'application'],
+            handler: function(request, reply) {
+                applicationService.getApplications(request.auth.credentials.id, function(err, applications) {
+                    if(err) {
+                        Winston.error(err.message);
+                        return reply(Boom.badImplementation(err));
+                    }
+
+                    reply(applications);
+                });
+            }
+        }
+    });
+
+    server.route({
         method: 'POST',
         path: '/application/create',
         config: {

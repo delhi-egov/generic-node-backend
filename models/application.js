@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     type: DataTypes.STRING,
     stage: DataTypes.STRING,
     userId: DataTypes.INTEGER,
+    status: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

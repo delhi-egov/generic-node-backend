@@ -13,6 +13,7 @@ module.exports = class ApplicationService {
     createApplication(user, type, callback) {
         this.db.Application.create({
              stage: "NEW",
+             status: "NOT_SUBMITTED",
              type: type,
              userId: user.id
          }).then(function(savedApplication) {
@@ -22,17 +23,50 @@ module.exports = class ApplicationService {
          });
     }
 
+    getApplications(userId, callback) {
+        this.db.Application.findAll({
+            where: {
+                userId: userId
+            }
+        }).then(function(applications) {
+            return callback(null, applications);
+        }).error(function(err) {
+            return callback(err);
+        });
+    }
+
     findApplicationById(applicationId, callback) {
         this.db.Application.findById(applicationId).then(callback);
     }
 
     updateStage(userId, applicationId, stage, callback) {
+        return this.updateStageAndStatus(userId, applicationId, stage, null, callback);
+    }
+
+    updateStatus(applicationId, status, callback) {
+        this.findApplicationById(applicationId, function(application) {
+            application.update({status: status}).then(function(updatedApplication) {
+                callback(null, updatedApplication);
+            }).error(function(err) {
+                callback(err);
+            });
+        });
+    }
+
+    updateStageAndStatus(userId, applicationId, stage, status, callback) {
         this.findApplicationById(applicationId, function(application) {
             application.getUser().then(function(user) {
                 if(user.id != userId) {
                     return callback(new Error("Unauthorized"));
                 }
-                application.update({stage: stage}).then(function(updatedApplication) {
+                var update = {};
+                if(stage !== null) {
+                    update.stage = stage;
+                }
+                if(status !== null) {
+                    update.status = status;
+                }
+                application.update(update).then(function(updatedApplication) {
                     callback(null, updatedApplication);
                 }).error(function(err) {
                     callback(err);
@@ -129,7 +163,7 @@ module.exports = class ApplicationService {
                             if(err) {
                                 return callback(err);
                             }
-                            that.changeStage(userId, applicationId, 'COMPLETE', function(err, application) {
+                            that.updateStageAndStatus(userId, applicationId, 'COMPLETE', 'PROGRESS', function(err, application) {
                                 if(err) {
                                     return callback(err);
                                 }
